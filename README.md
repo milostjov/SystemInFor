@@ -46,6 +46,19 @@ Root Directory:
 - You may need to unblock the executable or adjust service permissions.
 - Ensure `.NET Framework` is installed on the target system.
 
+## Companion Application (Helper.exe)
+
+SystemInFor relies on a companion application named `Helper.exe`, which is hosted in a separate repository. While the Windows service runs in the system context, `Helper.exe` is executed within the user's session and performs tasks that require user-level access, such as:
+
+- Detecting the currently logged-in user
+- Monitoring active foreground windows
+- Notifying the service about session-related changes
+
+You can find the `Helper.exe` source and build instructions here:
+[https://github.com/milostjov/SystemInFor.Helper](https://github.com/milostjov/Helper)
+
+Ensure `Helper.exe` is launched at user login (e.g., via Task Scheduler, startup folder, or registry key).
+
 ## License
 
 This project is licensed under the MIT License.
