@@ -91,4 +91,4 @@ Add or Remove Programs → SystemInForService
 
 ## 📄 License
 
-This project is intended for internal use. All rights reserved.
+This project is licensed under the MIT License.
