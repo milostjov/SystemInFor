@@ -1,118 +1,52 @@
 # SystemInFor
 
-**SystemInFor** is a Windows service developed in C# (.NET Framework 4.6.1) designed for automated system maintenance, such as remote restarts, session monitoring, and background operations. It works alongside a secondary executable, **Helper.exe**, which runs in the user session to perform tasks that cannot be executed directly by the service.
+**SystemInFor** is a Windows service developed in C# (.NET Framework) that performs system-related tasks such as restarting the system under certain conditions. It is designed to work independently without a GUI and is intended to be installed and run as a service.
 
-## ⚙️ Features
+## Features
 
-- Runs as a Windows Service with system-level privileges
-- Communicates with `Helper.exe` to monitor active user sessions
-- Automatically installs and starts via **Inno Setup** installer
-- Suitable for controlled environments with multiple client machines
+- Monitors the system and performs automated restart when required.
+- Designed to run silently in the background as a Windows Service.
+- Includes an installer via `ProjectInstaller.cs` for easy service registration.
 
-## 🧱 Technologies
-
-- **Language:** C#
-- **Framework:** .NET Framework 4.6.1
-- **Project Type:** Windows Service
-- **Installer:** Inno Setup
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 SystemInFor/
-├── SystemInFor/            → Service source code (.csproj)
-├── Helper/                 → User-level companion app
-├── installer/              → Inno Setup script (.iss)
-├── build/                  → Final .exe files (SystemInFor.exe & Helper.exe)
-├── README.md
+├── Program.cs             # Entry point of the service
+├── ProjectInstaller.cs    # Handles installation logic for the Windows service
+├── Service1.cs            # Core service logic implementation
+├── SystemInFor.csproj     # C# project file
+├── app.config             # Configuration file
+
+Root Directory:
+├── SystemInFor.sln        # Visual Studio solution file
+└── README.md              # Project documentation
 ```
 
-## 🚀 Installation
+## How It Works
 
-The application is installed using a pre-configured **Inno Setup** script located in the `installer/` folder.
+1. The service is installed using `installutil.exe` or similar tools.
+2. Once started, it runs in the background and executes logic defined in `Service1.cs`.
+3. It can be configured to run automatically on system startup.
 
-### 🧰 Steps:
+## Installation
 
-1. Build both `SystemInFor` and `Helper` projects in **Release mode**
-2. Copy both `SystemInFor.exe` and `Helper.exe` into a common folder (e.g., `build/`)
-3. Open the `installer/SystemInFor.iss` file using [Inno Setup Compiler](https://jrsoftware.org/isinfo.php)
-4. Compile the script to generate the installer:  
-   📦 `SystemInForInstaller.exe`
-5. Run the installer as Administrator
+1. Open the solution in Visual Studio and build it.
+2. Open Command Prompt as Administrator and run:
+   ```bash
+   installutil SystemInFor.exe
+   ```
+3. Start the service via `services.msc` or with:
+   ```bash
+   net start SystemInFor
+   ```
 
-## 📦 Inno Setup Highlights
+## Notes
 
-The installer performs the following tasks:
+- You may need to unblock the executable or adjust service permissions.
+- Ensure `.NET Framework` is installed on the target system.
 
-- Copies both `SystemInFor.exe` and `Helper.exe` to the installation directory
-- Installs the Windows service using `InstallUtil.exe`
-- Starts the service
-- Registers `Helper.exe` to auto-run on user login via the registry
+## License
 
-#### Example (simplified from script):
+This project is licensed under the MIT License.
 
-```ini
-[Files]
-Source: "SystemInFor.exe"; DestDir: "{app}"
-Source: "Helper.exe"; DestDir: "{app}"
-
-[Run]
-Filename: "InstallUtil.exe"; Parameters: "/i \"{app}\SystemInFor.exe\""
-Filename: "sc"; Parameters: "start SystemInForm"
-Filename: "reg"; Parameters: "... add Helper.exe to HKCU Run"
-```
-
-Uninstalling the application will:
-- Stop and uninstall the service
-- Remove registry entries for `Helper.exe`
-
-## 🔄 Uninstallation
-
-Uninstallation is handled automatically by the installer:
-
-- Stops and deletes the Windows service
-- Removes the registry key for auto-starting `Helper.exe`
-
-You can also uninstall via:
-```bash
-Add or Remove Programs → SystemInForService
-```
-
-## ⚠️ Requirements
-
-- Administrator privileges required for installation
-- Both `SystemInFor.exe` and `Helper.exe` must be present in the same directory
-- .NET Framework 4.6.1 must be installed on the target machine
-
-## 👤 Author
-
-- **Name:** Miloš Jovanović  
-- **GitHub:** [milostjov](https://github.com/milostjov)
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
-```text
-MIT License
-
-Copyright (c) 2025 Miloš Jovanović
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
