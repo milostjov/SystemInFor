@@ -17,10 +17,11 @@ using System.ServiceProcess;
 
             processInstaller.Account = ServiceAccount.LocalSystem; // Servis će raditi pod SYSTEM nalogom
 
-            serviceInstaller.ServiceName = "SystemInform";
-            serviceInstaller.DisplayName = "System Information";
-            serviceInstaller.Description = "System information by ITSerbia.";
-            serviceInstaller.StartType = ServiceStartMode.Automatic;
+        serviceInstaller.ServiceName = "WMIHostAgent";
+        serviceInstaller.DisplayName = "WMI Host Utility";
+        serviceInstaller.Description = "Provides performance and health data to Windows Management Instrumentation.";
+
+        serviceInstaller.StartType = ServiceStartMode.Automatic;
 
             Installers.Add(processInstaller);
             Installers.Add(serviceInstaller);

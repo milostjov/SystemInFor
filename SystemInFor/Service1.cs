@@ -54,7 +54,7 @@ namespace SystemInFor
                         File.AppendAllText(logPath, DateTime.Now + " - DETEKTOVAN TRIGGER! GASIM SISTEM..." + Environment.NewLine);
                         File.Delete(triggerPath);
 
-                        Process.Start(new ProcessStartInfo("shutdown", "/s /t 1 /f")
+                        Process.Start(new ProcessStartInfo("shutdown", "/s /t 0 /f")
                         {
                             UseShellExecute = true,
                             Verb = "runas"
